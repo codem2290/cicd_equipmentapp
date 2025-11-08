@@ -17,9 +17,15 @@ entity Equipments : cuid, managed {
 
 @cds.persistence.exists
 entity Employees {
-    Key ID          : String;
-    name        : String;
-    address     : String;
-    email       : String;
-    designation : String;
+    key ID          : String;
+        name        : String;
+        address     : String;
+        email       : String;
+        designation : String;
+}
+
+
+entity Test {
+    key ID   : String;
+        name : String;
 }
