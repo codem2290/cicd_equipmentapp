@@ -29,3 +29,9 @@ entity Test {
     key ID   : String;
         name : String;
 }
+
+
+entity Test1 {
+    key ID   : String;
+        name : String;
+}
