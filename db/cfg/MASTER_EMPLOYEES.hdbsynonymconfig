@@ -1,0 +1,8 @@
+{
+    "EQUIPMENT_APP_EMPLOYEES": {
+        "target": {
+            "object": "COMMON_TABLES_DB_EMPLOYEES",
+            "schema.configure": "commontables-db-hdi/schema"
+        }
+    }
+}

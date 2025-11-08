@@ -1,0 +1,67 @@
+_schema-version: 3.3.0
+ID: equipments_app
+version: 1.0.0
+description: "A simple CAP project."
+parameters:
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+modules:
+  - name: equipments_app-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      instances: 1
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm-ci
+    provides:
+      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: equipments_app-auth
+      - name: equipments_app-db
+
+  - name: equipments_app-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+      - name: equipments_app-db
+        properties:
+          TARGET_CONTAINER: ~{hdi-service-name}
+      - name: commontables-db
+        group: SERVICE_REPLACEMENTS
+        properties:
+          key: commontables-db-hdi
+          service: ~{commontables-db-hdi}
+
+resources:
+  - name: equipments_app-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: equipments_app-${org}-${space}
+        tenant-mode: dedicated
+  - name: equipments_app-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+    properties:
+      hdi-service-name: ${service-name}
+  - name: commontables-db
+    type: org.cloudfoundry.existing-service
+    parameters:
+      service-name: commontables-db
+    properties:
+      commontables-db-hdi: ${service-name}

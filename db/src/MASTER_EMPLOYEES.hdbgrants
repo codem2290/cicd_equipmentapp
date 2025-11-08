@@ -1,0 +1,14 @@
+{
+    "commontables-db-hdi": {
+        "object_owner": {
+            "container_roles": [
+                "MASTER_EMPLOYEE_TABLE_G#"
+            ]
+        },
+        "application_user": {
+            "container_roles": [
+                "MASTER_EMPLOYEE_TABLE"
+            ]
+        }
+    }
+}
